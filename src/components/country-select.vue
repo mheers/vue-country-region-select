@@ -31,6 +31,14 @@ export default {
       type: Boolean,
       default: true,
     },
+    i18nPrefix: {
+      type: String,
+      default: "countries",
+    },
+    i18nCountryName: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: () => ({
     ran: false,
@@ -57,7 +65,13 @@ export default {
       if (this.$i18n && this.usei18n) {
         countryList = countryList.map((country) => {
           let localeCountry = Object.assign({}, country);
-          localeCountry.countryName = this.$t(country.countryName);
+          let translationKey = this.i18nCountryName
+            ? country.countryName
+            : country.countryShortCode;
+          if (this.i18nPrefix !== "") {
+            translationKey = this.i18nPrefix + "." + translationKey;
+          }
+          localeCountry.countryName = this.$t(translationKey);
           return localeCountry;
         });
         countryList.sort((country1, country2) => {
